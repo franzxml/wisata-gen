@@ -1,0 +1,20 @@
+{
+  "name": "wisata-gen",
+  "private": true,
+  "workspaces": [
+    "packages/shared",
+    "apps/frontend"
+  ],
+  "scripts": {
+    "dev:fe": "bun run --cwd apps/frontend dev",
+    "dev:be": "cd apps/backend && .venv/bin/uvicorn app.main:app --reload --port 8000",
+    "dev": "concurrently --names BE,FE --prefix-colors cyan,green --kill-others-on-fail \"bun run dev:be\" \"bun run dev:fe\"",
+    "build:shared": "bun run --cwd packages/shared build",
+    "build:fe": "bun run --cwd apps/frontend build",
+    "build": "bun run build:shared && bun run build:fe",
+    "typecheck": "bun run --cwd packages/shared typecheck && bun run --cwd apps/frontend typecheck"
+  },
+  "devDependencies": {
+    "concurrently": "^10.0.3"
+  }
+}
