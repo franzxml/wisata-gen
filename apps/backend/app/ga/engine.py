@@ -7,7 +7,7 @@ PERBAIKAN dari sistem lama (integer encoding):
          crossover = random.choice([induk1, induk2])  ← gen TIDAK ditukar, hanya pilih satu induk
 
   Baru : kromosom = list 20-bit [0,1,0,1,...] — setiap bit = apakah paket ke-i dipilih
-         crossover = one-point crossover pada bit array ← gen BENAR-BENAR ditukar
+         crossover = uniform crossover ← setiap bit diputuskan independen (cocok untuk knapsack binary)
 
 Pergeseran masalah: dari "pilih 1 paket terbaik" → "pilih kombinasi paket terbaik"
 dalam batas anggaran & durasi (knapsack-style, selaras teori di laporan).
@@ -170,22 +170,24 @@ def crossover(
     p1: Kromosom, p2: Kromosom, pc: float
 ) -> tuple[Kromosom, Kromosom]:
     """
-    One-point crossover pada bit array.
+    Uniform crossover pada bit array.
 
-    PERBAIKAN dari sistem lama:
-    Dua induk benar-benar menukar potongan gen mereka di titik acak.
+    Setiap bit diputuskan secara independen: peluang 50% berasal dari P1 atau P2.
+    Lebih tepat dari one-point crossover untuk masalah binary knapsack karena
+    setiap bit (paket) tidak memiliki hubungan posisional dengan bit tetangganya —
+    tidak ada asumsi building blocks yang perlu dipertahankan.
 
-    Contoh (titik crossover = 7):
-      P1 = [1,0,1,0,0,1,0 | 1,0,1,0,0,0,0,0,0,0,0,0,0]
-      P2 = [0,1,0,1,1,0,1 | 0,1,0,1,1,0,0,0,0,0,0,0,0]
-      A1 = P1[:7] + P2[7:] = [1,0,1,0,0,1,0,0,1,0,1,1,0,0,0,0,0,0,0,0]
-      A2 = P2[:7] + P1[:7] = [0,1,0,1,1,0,1,1,0,1,0,0,0,0,0,0,0,0,0,0]
+    Contoh:
+      P1 = [1, 0, 1, 0, 0, 1, 0, 1, ...]
+      P2 = [0, 1, 0, 1, 1, 0, 1, 0, ...]
+      mask= [P1,P2,P2,P1,P2,P1,P1,P2, ...]  ← tiap posisi diundi independen
+      A1 = [1, 1, 0, 0, 1, 1, 0, 0, ...]
+      A2 = [0, 0, 1, 1, 0, 0, 1, 1, ...]
     """
     if random.random() > pc:
         return p1[:], p2[:]
-    titik = random.randint(1, JUMLAH_PAKET - 1)
-    anak1 = p1[:titik] + p2[titik:]
-    anak2 = p2[:titik] + p1[titik:]
+    anak1 = [p1[i] if random.random() < 0.5 else p2[i] for i in range(JUMLAH_PAKET)]
+    anak2 = [p2[i] if random.random() < 0.5 else p1[i] for i in range(JUMLAH_PAKET)]
     return anak1, anak2
 
 
