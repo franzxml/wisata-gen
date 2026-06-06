@@ -156,6 +156,10 @@ Skor fitness dinormalisasi 0–1 dengan bobot per kriteria:
 
 Nilai fitness maksimum ~1.10.
 
+## Domain
+
+* **Production:** https://wisata-gen.vercel.app
+
 ---
 
 Dikembangkan oleh **@franzxml**
