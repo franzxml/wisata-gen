@@ -1,0 +1,9 @@
+{
+  "version": 2,
+  "installCommand": "bun install",
+  "buildCommand": "bun run build:shared && bun run build:fe",
+  "outputDirectory": "apps/frontend/dist",
+  "rewrites": [
+    { "source": "/api/(.*)", "destination": "/api/index.py" }
+  ]
+}
