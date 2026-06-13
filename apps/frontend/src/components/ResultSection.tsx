@@ -1,39 +1,39 @@
 import type { OptimizeResult } from "@wisata-gen/shared";
 import ResultsView from "./ResultsView";
 
-interface Props {
+type Props = {
   appState: "loading" | "done" | "error";
   result:   OptimizeResult | null;
   error:    string;
   onReset:  () => void;
-}
+};
 
 export default function ResultSection({ appState, result, error, onReset }: Props) {
   return (
-    <section id="result-section" style={{ minHeight: "100vh", scrollSnapAlign: "start", background: "#f0efe9" }}>
+    <section id="result-section" className="min-h-screen snap-start bg-surface">
 
       {appState === "loading" && (
-        <div style={{ minHeight: "100vh", display: "flex", flexDirection: "column", alignItems: "center", justifyContent: "center", gap: "20px", animation: "secFadeIn 0.6s cubic-bezier(0.16,1,0.3,1) both" }}>
-          <div style={{ width: "32px", height: "32px", borderRadius: "50%", border: "2px solid #c9c9bf", borderTopColor: "#1c1c14", animation: "spin 0.8s linear infinite" }} />
-          <div style={{ textAlign: "center" }}>
-            <p style={{ fontFamily: "Space Grotesk, sans-serif", fontWeight: 600, color: "#1c1c14" }}>Menjalankan Evolusi</p>
-            <p style={{ fontSize: "14px", color: "#6b6b63", marginTop: "4px" }}>GA sedang mencari kombinasi optimal...</p>
+        <div className="min-h-screen flex flex-col items-center justify-center gap-5 animate-sec-fade-in">
+          <div className="w-8 h-8 rounded-full border-2 border-dim border-t-dark animate-spinner" />
+          <div className="text-center">
+            <p className="font-display font-semibold text-dark">Menjalankan Evolusi</p>
+            <p className="text-sm text-secondary mt-1">GA sedang mencari kombinasi optimal...</p>
           </div>
         </div>
       )}
 
       {appState === "done" && result && (
-        <div style={{ animation: "secFadeIn 0.7s cubic-bezier(0.16,1,0.3,1) both", minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center" }}>
+        <div className="animate-sec-fade-in-slow min-h-screen flex items-center justify-center">
           <ResultsView result={result} />
         </div>
       )}
 
       {appState === "error" && (
-        <div style={{ minHeight: "100vh", display: "flex", alignItems: "center", justifyContent: "center", padding: "24px", animation: "secFadeIn 0.6s cubic-bezier(0.16,1,0.3,1) both" }}>
-          <div style={{ maxWidth: "360px", width: "100%", textAlign: "center" }}>
-            <p style={{ fontFamily: "Space Grotesk, sans-serif", fontSize: "20px", fontWeight: 700, color: "#1c1c14", marginBottom: "12px" }}>Optimasi Gagal</p>
-            <p style={{ fontSize: "13px", color: "#6b3333", background: "#f5e8e8", border: "1px solid #e8c9c9", borderRadius: "10px", padding: "12px", textAlign: "left", marginBottom: "16px" }}>{error}</p>
-            <button onClick={onReset} style={{ width: "100%", padding: "12px", borderRadius: "50px", background: "#1c1c14", color: "#f0efe9", fontWeight: 600, border: "none", cursor: "pointer", fontFamily: "Space Grotesk, sans-serif" }}>
+        <div className="min-h-screen flex items-center justify-center p-6 animate-sec-fade-in">
+          <div className="max-w-[360px] w-full text-center">
+            <p className="font-display text-xl font-bold text-dark mb-3">Optimasi Gagal</p>
+            <p className="text-[13px] text-error bg-error-surface border border-error-dim rounded-[10px] p-3 text-left mb-4">{error}</p>
+            <button onClick={onReset} className="w-full p-3 rounded-full bg-dark text-surface font-semibold border-0 cursor-pointer font-display">
               Coba Lagi
             </button>
           </div>

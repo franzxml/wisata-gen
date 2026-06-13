@@ -1,10 +1,10 @@
 import { useState, useRef } from "react";
 
-interface Props {
+type Props = {
   terbaik:  number[];
   rata:     number[];
   terburuk: number[];
-}
+};
 
 const SERIES = [
   { key: "terbaik"  as const, label: "Terbaik",  color: "#3d3d22", dash: ""      },
@@ -40,7 +40,7 @@ export default function ConvergenceChart({ terbaik, rata, terburuk }: Props) {
   const points = (key: keyof typeof series) =>
     series[key].map((v, i) => `${toX(i)},${toY(v)}`).join(" ");
 
-  const yTicks = Array.from({ length: 5 }, (_, i) => minVal + (range * i) / 4);
+  const yTicks  = Array.from({ length: 5 }, (_, i) => minVal + (range * i) / 4);
   const xLabels = [0, Math.floor(n/4), Math.floor(n/2), Math.floor(n*3/4), n-1];
 
   function handleMouseMove(e: React.MouseEvent<SVGSVGElement>) {
@@ -60,8 +60,7 @@ export default function ConvergenceChart({ terbaik, rata, terburuk }: Props) {
       <svg
         ref={svgRef}
         viewBox={`0 0 ${W} ${H}`}
-        className="w-full"
-        style={{ cursor: "crosshair" }}
+        className="w-full cursor-crosshair"
         onMouseMove={handleMouseMove}
         onMouseLeave={() => setHoverIdx(null)}
       >
@@ -110,7 +109,6 @@ export default function ConvergenceChart({ terbaik, rata, terburuk }: Props) {
             <line x1={hx} y1={pad.t} x2={hx} y2={pad.t + ih}
               stroke="#1c1c14" strokeWidth="1" strokeDasharray="4 3" opacity="0.3" />
 
-            {/* Dots on each series */}
             {SERIES.map(s => (
               <circle key={s.key}
                 cx={hx} cy={toY(series[s.key][hoverIdx])}
@@ -118,7 +116,6 @@ export default function ConvergenceChart({ terbaik, rata, terburuk }: Props) {
               />
             ))}
 
-            {/* Tooltip */}
             <g transform={`translate(${tooltipRight ? hx - 124 : hx + 12},${pad.t + 4})`}>
               <rect x="0" y="0" width="112" height="72" rx="8" fill="#1c1c14" opacity="0.92" />
               <text x="10" y="16" fontSize="10" fill="#9b9b94">Generasi {hoverIdx + 1}</text>
@@ -136,9 +133,9 @@ export default function ConvergenceChart({ terbaik, rata, terburuk }: Props) {
       </svg>
 
       {/* Legend */}
-      <div style={{ display: "flex", gap: "20px", justifyContent: "center", marginTop: "8px" }}>
+      <div className="flex gap-5 justify-center mt-2">
         {SERIES.map(s => (
-          <div key={s.key} style={{ display: "flex", alignItems: "center", gap: "6px", fontSize: "11px", color: s.color }}>
+          <div key={s.key} className="flex items-center gap-1.5 text-[11px]" style={{ color: s.color }}>
             <svg width="20" height="10">
               <line x1="0" y1="5" x2="20" y2="5"
                 stroke={s.color} strokeWidth={s.key === "terbaik" ? 2.5 : 1.5}

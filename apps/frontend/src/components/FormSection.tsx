@@ -1,4 +1,5 @@
 import { useState, useEffect, useRef } from "react";
+import type { CSSProperties, FormEvent } from "react";
 import type { OptimizeRequest } from "@wisata-gen/shared";
 import DatasetView from "./DatasetView";
 
@@ -9,10 +10,10 @@ const DURATION_PRESETS = [{ label: "Weekend",    sub: "2–3 hari",      value: 
                           { label: "Seminggu",   sub: "7 hari",        value: 7  },
                           { label: "Dua Minggu", sub: "14 hari",       value: 14 }];
 
-interface Props {
-  onSubmit:  (req: OptimizeRequest) => void;
-  appState:  "idle" | "loading" | "done" | "error";
-}
+type Props = {
+  onSubmit: (req: OptimizeRequest) => void;
+  appState: "idle" | "loading" | "done" | "error";
+};
 
 export default function FormSection({ onSubmit, appState }: Props) {
   const [visible, setVisible]         = useState(false);
@@ -36,60 +37,56 @@ export default function FormSection({ onSubmit, appState }: Props) {
     return () => obs.disconnect();
   }, []);
 
-  function handleSubmit(e: React.FormEvent) {
+  function handleSubmit(e: FormEvent) {
     e.preventDefault();
     onSubmit({ anggaran_maks: anggaran, durasi_maks: durasi, ukuran_populasi: populasi, max_generasi: generasi, pc, pm, metode_seleksi: metode });
   }
 
-  const anim = (delay: number): React.CSSProperties => ({
+  const anim = (delay: number): CSSProperties => ({
     opacity:    visible ? 1 : 0,
     transform:  visible ? "translateY(0)" : "translateY(28px)",
     transition: `opacity 0.75s ${delay}ms cubic-bezier(0.16,1,0.3,1), transform 0.75s ${delay}ms cubic-bezier(0.16,1,0.3,1)`,
   });
 
   return (
-    <section id="form-section" ref={formRef} style={{ minHeight: "100vh", scrollSnapAlign: "start", background: "#f0efe9", display: "flex", alignItems: "center", justifyContent: "center", padding: "48px 24px" }}>
-      <div style={{ maxWidth: "30rem", margin: "0 auto" }}>
+    <section id="form-section" ref={formRef} className="min-h-screen snap-start bg-surface flex items-center justify-center py-12 px-6">
+      <div className="max-w-[30rem] mx-auto w-full">
 
-        <div style={{ ...anim(0), marginBottom: "40px", textAlign: "center" }}>
-          <p style={{ fontFamily: "Space Grotesk, sans-serif", fontWeight: 700, color: "#1c1c14", lineHeight: 1.08, letterSpacing: "-0.02em", fontSize: "clamp(2.5rem, 6vw, 5rem)" }}>
+        <div style={anim(0)} className="mb-10 text-center">
+          <p className="font-display font-bold text-dark leading-[1.08] tracking-[-0.02em] text-[clamp(2.5rem,6vw,5rem)]">
             Atur<br />Preferensi<br />Perjalanan.
           </p>
         </div>
 
-        <form onSubmit={handleSubmit} style={{ display: "flex", flexDirection: "column", gap: "14px" }}>
+        <form onSubmit={handleSubmit} className="flex flex-col gap-3.5">
 
           {/* Anggaran */}
-          <div style={{ ...anim(120), padding: "20px", borderRadius: "16px", background: "#ffffff", border: "1px solid #c9c9bf" }}>
-            <label style={{ fontSize: "10px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em", color: "#9b9b94", display: "block", marginBottom: "14px" }}>Anggaran Maksimum</label>
-            <div style={{ display: "flex", gap: "8px" }}>
+          <div style={anim(120)} className="p-5 rounded-2xl bg-white border border-dim">
+            <label className="text-[10px] font-semibold uppercase tracking-[0.1em] text-muted block mb-3.5">Anggaran Maksimum</label>
+            <div className="flex gap-2">
               {BUDGET_PRESETS.map(p => (
-                <button key={p.value} type="button" onClick={() => setAnggaran(p.value)} style={{
-                  flex: 1, padding: "12px 8px", borderRadius: "10px", cursor: "pointer", border: "none",
-                  transition: "all 0.15s", textAlign: "center",
-                  background: anggaran === p.value ? "#1c1c14" : "#e8e7e1",
-                  color:      anggaran === p.value ? "#f0efe9"  : "#6b6b63",
-                }}>
-                  <div style={{ fontSize: "13px", fontWeight: 600, fontFamily: "Space Grotesk, sans-serif" }}>{p.label}</div>
-                  <div style={{ fontSize: "11px", marginTop: "3px", opacity: 0.75 }}>{p.sub}</div>
+                <button key={p.value} type="button" onClick={() => setAnggaran(p.value)}
+                  className={`flex-1 py-3 px-2 rounded-[10px] cursor-pointer border-0 transition-all text-center ${
+                    anggaran === p.value ? "bg-dark text-surface" : "bg-subtle text-secondary"
+                  }`}>
+                  <div className="text-[13px] font-semibold font-display">{p.label}</div>
+                  <div className="text-[11px] mt-[3px] opacity-75">{p.sub}</div>
                 </button>
               ))}
             </div>
           </div>
 
           {/* Durasi */}
-          <div style={{ ...anim(220), padding: "20px", borderRadius: "16px", background: "#ffffff", border: "1px solid #c9c9bf" }}>
-            <label style={{ fontSize: "10px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em", color: "#9b9b94", display: "block", marginBottom: "14px" }}>Durasi Maksimum</label>
-            <div style={{ display: "flex", gap: "8px" }}>
+          <div style={anim(220)} className="p-5 rounded-2xl bg-white border border-dim">
+            <label className="text-[10px] font-semibold uppercase tracking-[0.1em] text-muted block mb-3.5">Durasi Maksimum</label>
+            <div className="flex gap-2">
               {DURATION_PRESETS.map(p => (
-                <button key={p.value} type="button" onClick={() => setDurasi(p.value)} style={{
-                  flex: 1, padding: "12px 8px", borderRadius: "10px", cursor: "pointer", border: "none",
-                  transition: "all 0.15s", textAlign: "center",
-                  background: durasi === p.value ? "#1c1c14" : "#e8e7e1",
-                  color:      durasi === p.value ? "#f0efe9"  : "#6b6b63",
-                }}>
-                  <div style={{ fontSize: "13px", fontWeight: 600, fontFamily: "Space Grotesk, sans-serif" }}>{p.label}</div>
-                  <div style={{ fontSize: "11px", marginTop: "3px", opacity: 0.75 }}>{p.sub}</div>
+                <button key={p.value} type="button" onClick={() => setDurasi(p.value)}
+                  className={`flex-1 py-3 px-2 rounded-[10px] cursor-pointer border-0 transition-all text-center ${
+                    durasi === p.value ? "bg-dark text-surface" : "bg-subtle text-secondary"
+                  }`}>
+                  <div className="text-[13px] font-semibold font-display">{p.label}</div>
+                  <div className="text-[11px] mt-[3px] opacity-75">{p.sub}</div>
                 </button>
               ))}
             </div>
@@ -97,23 +94,22 @@ export default function FormSection({ onSubmit, appState }: Props) {
 
           {/* Parameter GA */}
           <div style={anim(300)}>
-            <div style={{ borderRadius: "16px", background: "#ffffff", border: "1px solid #c9c9bf", overflow: "hidden" }}>
+            <div className="rounded-2xl bg-white border border-dim overflow-hidden">
               <button type="button" onClick={() => setShowParams(!showParams)}
-                style={{ width: "100%", padding: "16px 20px", background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", justifyContent: "space-between", fontFamily: "Space Grotesk, sans-serif", fontSize: "13px", fontWeight: 500, color: "#1c1c14" }}>
+                className="w-full py-4 px-5 bg-transparent border-0 cursor-pointer flex items-center justify-between font-display text-[13px] font-medium text-dark">
                 <span>Parameter Algoritma Genetika</span>
                 <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="#9b9b94" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                  style={{ transition: "transform 0.2s", transform: showParams ? "rotate(180deg)" : "rotate(0deg)" }}>
+                  className="transition-transform duration-200"
+                  style={{ transform: showParams ? "rotate(180deg)" : "rotate(0deg)" }}>
                   <path d="M6 9l6 6 6-6" />
                 </svg>
               </button>
 
-              <div style={{
-                display: "grid",
-                gridTemplateRows: showParams ? "1fr" : "0fr",
-                transition: "grid-template-rows 0.35s cubic-bezier(0.4,0,0.2,1)",
-              }}>
-                <div style={{ overflow: "hidden" }}>
-                  <div style={{ padding: "16px 20px 20px", borderTop: "1px solid #e8e7e1", display: "flex", flexDirection: "column", gap: "14px" }}>
+              <div
+                className="grid transition-[grid-template-rows] duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)]"
+                style={{ gridTemplateRows: showParams ? "1fr" : "0fr" }}>
+                <div className="overflow-hidden">
+                  <div className="pt-4 px-5 pb-5 border-t border-subtle flex flex-col gap-3.5">
 
                     <SliderParam label="Ukuran Populasi" value={populasi} display={`${populasi} kromosom`}
                       min={10} max={200} step={10} onChange={setPopulasi} />
@@ -128,16 +124,13 @@ export default function FormSection({ onSubmit, appState }: Props) {
                       min={0.01} max={0.3} step={0.01} onChange={setPm} />
 
                     <div>
-                      <p style={{ fontSize: "10px", fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.1em", color: "#9b9b94", marginBottom: "8px" }}>Metode Seleksi</p>
-                      <div style={{ display: "flex", gap: "8px" }}>
+                      <p className="text-[10px] font-semibold uppercase tracking-[0.1em] text-muted mb-2">Metode Seleksi</p>
+                      <div className="flex gap-2">
                         {(["tournament", "roulette"] as const).map(m => (
-                          <button key={m} type="button" onClick={() => setMetode(m)} style={{
-                            flex: 1, padding: "8px", borderRadius: "8px", fontSize: "13px", fontWeight: 500,
-                            cursor: "pointer", border: "none", transition: "all 0.15s", textTransform: "capitalize",
-                            background: metode === m ? "#1c1c14" : "#e8e7e1",
-                            color:      metode === m ? "#f0efe9"  : "#6b6b63",
-                            fontFamily: "Space Grotesk, sans-serif",
-                          }}>{m}</button>
+                          <button key={m} type="button" onClick={() => setMetode(m)}
+                            className={`flex-1 p-2 rounded-lg text-[13px] font-medium cursor-pointer border-0 transition-all capitalize font-display ${
+                              metode === m ? "bg-dark text-surface" : "bg-subtle text-secondary"
+                            }`}>{m}</button>
                         ))}
                       </div>
                     </div>
@@ -151,22 +144,20 @@ export default function FormSection({ onSubmit, appState }: Props) {
           {/* Dataset */}
           <div style={anim(360)}>
             <button type="button" onClick={() => setShowDataset(!showDataset)}
-              style={{ background: "none", border: "none", cursor: "pointer", display: "flex", alignItems: "center", gap: "6px", color: "#6b6b63", fontSize: "12px", padding: "0", fontFamily: "DM Sans, sans-serif" }}>
+              className="bg-transparent border-0 cursor-pointer flex items-center gap-1.5 text-secondary text-xs p-0 font-sans">
               <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"
-                style={{ transition: "transform 0.2s", transform: showDataset ? "rotate(90deg)" : "rotate(0deg)", flexShrink: 0 }}>
+                className="transition-transform duration-200 flex-shrink-0"
+                style={{ transform: showDataset ? "rotate(90deg)" : "rotate(0deg)" }}>
                 <path d="M9 18l6-6-6-6" />
               </svg>
               Lihat dataset paket wisata (20 paket)
             </button>
 
-            <div style={{
-              display: "grid",
-              gridTemplateRows: showDataset ? "1fr" : "0fr",
-              transition: "grid-template-rows 0.35s cubic-bezier(0.4,0,0.2,1)",
-              marginTop: showDataset ? "12px" : "0",
-            }}>
-              <div style={{ overflow: "hidden" }}>
-                <div style={{ borderRadius: "12px", border: "1px solid #c9c9bf", overflow: "hidden" }}>
+            <div
+              className={`grid transition-[grid-template-rows] duration-[350ms] ease-[cubic-bezier(0.4,0,0.2,1)] ${showDataset ? "mt-3" : "mt-0"}`}
+              style={{ gridTemplateRows: showDataset ? "1fr" : "0fr" }}>
+              <div className="overflow-hidden">
+                <div className="rounded-xl border border-dim overflow-hidden">
                   <DatasetView />
                 </div>
               </div>
@@ -175,14 +166,10 @@ export default function FormSection({ onSubmit, appState }: Props) {
 
           {/* Submit */}
           <div style={anim(440)}>
-            <button type="submit" disabled={appState === "loading"} style={{
-              width: "100%", padding: "15px", borderRadius: "12px",
-              background: appState === "loading" ? "#c9c9bf" : "#1c1c14",
-              color: "#f0efe9", fontWeight: 600, fontSize: "15px",
-              cursor: appState === "loading" ? "not-allowed" : "pointer",
-              border: "none", transition: "all 0.2s",
-              fontFamily: "Space Grotesk, sans-serif",
-            }}>
+            <button type="submit" disabled={appState === "loading"}
+              className={`w-full p-[15px] rounded-xl text-surface font-semibold text-[15px] border-0 transition-all font-display ${
+                appState === "loading" ? "bg-dim cursor-not-allowed" : "bg-dark cursor-pointer"
+              }`}>
               {appState === "loading" ? "Menjalankan Evolusi..." : "Jalankan Optimasi"}
             </button>
           </div>
@@ -193,7 +180,7 @@ export default function FormSection({ onSubmit, appState }: Props) {
   );
 }
 
-interface SliderParamProps {
+type SliderParamProps = {
   label:    string;
   value:    number;
   display:  string;
@@ -201,21 +188,20 @@ interface SliderParamProps {
   max:      number;
   step:     number;
   onChange: (v: number) => void;
-}
+};
 
 function SliderParam({ label, value, display, min, max, step, onChange }: SliderParamProps) {
   return (
     <div>
-      <div style={{ display: "flex", justifyContent: "space-between", alignItems: "baseline", marginBottom: "6px" }}>
-        <span style={{ fontSize: "11px", color: "#9b9b94" }}>{label}</span>
-        <span style={{ fontSize: "12px", fontWeight: 700, color: "#1c1c14", fontFamily: "Space Grotesk, sans-serif" }}>{display}</span>
+      <div className="flex justify-between items-baseline mb-1.5">
+        <span className="text-[11px] text-muted">{label}</span>
+        <span className="text-xs font-bold text-dark font-display">{display}</span>
       </div>
       <input
         type="range" min={min} max={max} step={step} value={value}
         onChange={e => onChange(Number(e.target.value))}
-        style={{ width: "100%", accentColor: "#1c1c14" }}
+        className="w-full accent-dark"
       />
     </div>
   );
 }
-

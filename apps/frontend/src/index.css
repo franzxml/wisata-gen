@@ -3,6 +3,39 @@
 @theme {
   --font-sans:    'DM Sans', ui-sans-serif, system-ui, sans-serif;
   --font-display: 'Space Grotesk', ui-sans-serif, system-ui, sans-serif;
+
+  --color-dark:          #1c1c14;
+  --color-surface:       #f0efe9;
+  --color-surface-alt:   #fafaf8;
+  --color-subtle:        #e8e7e1;
+  --color-dim:           #c9c9bf;
+  --color-muted:         #9b9b94;
+  --color-secondary:     #6b6b63;
+  --color-accent:        #3d3d22;
+  --color-accent-light:  #e8e0c8;
+  --color-worst:         #9b6b5a;
+  --color-error:         #6b3333;
+  --color-error-surface: #f5e8e8;
+  --color-error-dim:     #e8c9c9;
+
+  --animate-sec-fade-in:      sec-fade-in 0.6s cubic-bezier(0.16,1,0.3,1) both;
+  --animate-sec-fade-in-slow: sec-fade-in 0.7s cubic-bezier(0.16,1,0.3,1) both;
+  --animate-spinner:          spinner 0.8s linear infinite;
+  --animate-chevron-bounce:   chevron-bounce 1.6s ease-in-out infinite;
+}
+
+@keyframes sec-fade-in {
+  from { opacity: 0; transform: translateY(32px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes spinner {
+  to { transform: rotate(360deg); }
+}
+
+@keyframes chevron-bounce {
+  0%, 100% { transform: translateY(0);   opacity: 0.75; }
+  50%       { transform: translateY(5px); opacity: 1;    }
 }
 
 @layer base {
@@ -10,4 +43,12 @@
     font-family: var(--font-sans);
     -webkit-font-smoothing: antialiased;
   }
+}
+
+[data-snap-container] {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+[data-snap-container]::-webkit-scrollbar {
+  display: none;
 }

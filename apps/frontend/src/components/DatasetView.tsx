@@ -23,25 +23,23 @@ const DATASET = [
   { no: 20, nama: "Sabang Aceh",          harga: 3200000,  rating: 4.4, durasi: 4, destinasi: 5 },
 ];
 
-const fmtHarga = formatRupiah;
+const tdClass = "px-[10px] py-2 text-[11px] text-dark border-b border-surface";
 
 export default function DatasetView() {
   return (
-    <table style={{ width: "100%", borderCollapse: "collapse", tableLayout: "fixed" }}>
+    <table className="w-full border-collapse table-fixed">
       <colgroup>
         <col style={{ width: "32px" }} />
-        <col />                          {/* nama — flex */}
+        <col />
         <col style={{ width: "110px" }} />
         <col style={{ width: "52px" }} />
         <col style={{ width: "48px" }} />
         <col style={{ width: "40px" }} />
       </colgroup>
       <thead>
-        <tr style={{ background: "#fafaf8" }}>
+        <tr className="bg-surface-alt">
           {["#", "Nama", "Harga", "Rating", "Hari", "Dest"].map(h => (
-            <th key={h} style={{ padding: "8px 10px", textAlign: "left", fontSize: "10px",
-              fontWeight: 600, textTransform: "uppercase", letterSpacing: "0.07em",
-              color: "#9b9b94", borderBottom: "1px solid #e8e7e1" }}>
+            <th key={h} className="px-[10px] py-2 text-left text-[10px] font-semibold uppercase tracking-[0.07em] text-muted border-b border-subtle">
               {h}
             </th>
           ))}
@@ -49,28 +47,20 @@ export default function DatasetView() {
       </thead>
       <tbody>
         {DATASET.map((p, i) => (
-          <tr key={p.no} style={{ background: i % 2 === 0 ? "#ffffff" : "#fafaf8" }}>
-            <td style={td}><span style={{ color: "#9b9b94" }}>{p.no}</span></td>
-            <td style={{ ...td, overflow: "hidden", textOverflow: "ellipsis", whiteSpace: "nowrap" }}
-              title={"Paket " + p.nama}>
+          <tr key={p.no} className={i % 2 === 0 ? "bg-white" : "bg-surface-alt"}>
+            <td className={tdClass}><span className="text-muted">{p.no}</span></td>
+            <td className={`${tdClass} overflow-hidden text-ellipsis whitespace-nowrap`} title={"Paket " + p.nama}>
               {p.nama}
             </td>
-            <td style={td}>{fmtHarga(p.harga)}</td>
-            <td style={{ ...td, fontWeight: 600, color: p.rating >= 4.5 ? "#3d3d22" : "#1c1c14" }}>
+            <td className={tdClass}>{formatRupiah(p.harga)}</td>
+            <td className={`${tdClass} font-semibold ${p.rating >= 4.5 ? "text-accent" : "text-dark"}`}>
               {p.rating.toFixed(1)}
             </td>
-            <td style={td}>{p.durasi}</td>
-            <td style={td}>{p.destinasi}</td>
+            <td className={tdClass}>{p.durasi}</td>
+            <td className={tdClass}>{p.destinasi}</td>
           </tr>
         ))}
       </tbody>
     </table>
   );
 }
-
-const td: React.CSSProperties = {
-  padding: "8px 10px",
-  fontSize: "11px",
-  color: "#1c1c14",
-  borderBottom: "1px solid #f0efe9",
-};

@@ -1,5 +1,5 @@
 import { useState } from "react";
-import type { OptimizeRequest, OptimizeResult } from "@wisata-gen/shared";
+import type { OptimizeRequest, OptimizeResult, ApiResponse } from "@wisata-gen/shared";
 import LandingView from "./components/LandingView";
 
 type AppState = "idle" | "loading" | "done" | "error";
@@ -14,9 +14,9 @@ export default function App() {
     setError("");
     try {
       const res  = await fetch("/api/optimize", { method: "POST", headers: { "Content-Type": "application/json" }, body: JSON.stringify(req) });
-      const json = await res.json();
+      const json: ApiResponse<OptimizeResult> & { detail?: string } = await res.json();
       if (!res.ok) throw new Error(json.detail ?? "Terjadi kesalahan pada server");
-      setResult(json.data as OptimizeResult);
+      setResult(json.data);
       setAppState("done");
     } catch (e) {
       setError(e instanceof Error ? e.message : "Error tidak diketahui");

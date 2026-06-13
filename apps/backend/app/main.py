@@ -2,6 +2,7 @@ import os
 from fastapi import FastAPI
 from fastapi.middleware.cors import CORSMiddleware
 from app.routers import optimize
+from app.schemas import ApiResponse
 
 app = FastAPI(title="Wisata Gen API", version="0.2.0")
 
@@ -19,6 +20,6 @@ app.add_middleware(
 app.include_router(optimize.router, prefix="/api/optimize", tags=["optimize"])
 
 
-@app.get("/api/health")
-def health():
-    return {"status": "ok", "version": "0.2.0"}
+@app.get("/api/health", response_model=ApiResponse[dict])
+def health() -> ApiResponse[dict]:
+    return ApiResponse(data={"version": "0.2.0"}, message="ok")

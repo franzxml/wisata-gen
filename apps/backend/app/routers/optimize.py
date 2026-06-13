@@ -6,7 +6,7 @@ router = APIRouter()
 
 
 @router.post("", response_model=ApiResponse[OptimizeResult])
-def optimize(req: OptimizeRequest):
+def optimize(req: OptimizeRequest) -> ApiResponse[OptimizeResult]:
     """
     Jalankan Algoritma Genetika untuk mencari kombinasi paket wisata terbaik.
     Kromosom = binary array (binary encoding) — crossover benar-benar menukar gen.
