@@ -1,11 +1,11 @@
 ## Fitur
 
 - Optimasi kombinasi paket wisata dari 20 destinasi Indonesia menggunakan Algoritma Genetika
-- Representasi kromosom binary (20-bit) — setiap bit merepresentasikan apakah paket ke-i dipilih
+- Representasi kromosom binary (20-bit) - setiap bit merepresentasikan apakah paket ke-i dipilih
 - Fungsi fitness multi-kriteria: rata-rata rating, total destinasi, efisiensi harga, dan pemanfaatan durasi
 - Repair operator untuk menjaga feasibility constraint anggaran dan durasi sepanjang evolusi
 - Seleksi tournament dan roulette wheel
-- Uniform crossover pada bit array — gen benar-benar ditukar antar kromosom
+- Uniform crossover pada bit array - gen benar-benar ditukar antar kromosom
 - Bit-flip mutation dengan probabilitas per-bit
 - Elitisme 1 individu terbaik per generasi
 - Grafik konvergensi fitness terbaik, rata-rata, dan terburuk per generasi (custom SVG)
@@ -117,14 +117,14 @@ bun --version       # versi terbaru
 
 | Parameter | Batas |
 |---|---|
-| Anggaran | Configurable — default Rp 8.000.000 |
-| Durasi | Configurable — default 7 hari |
+| Anggaran | Configurable - default Rp 8.000.000 |
+| Durasi | Configurable - default 7 hari |
 
 Kromosom yang melanggar constraint diperbaiki oleh *repair operator* setelah crossover dan mutasi.
 
 ## Fungsi Fitness
 
-Skor fitness dinormalisasi 0–1 dengan bobot per kriteria:
+Skor fitness dinormalisasi 0-1 dengan bobot per kriteria:
 
 | Kriteria | Bobot |
 |---|---|
@@ -132,7 +132,7 @@ Skor fitness dinormalisasi 0–1 dengan bobot per kriteria:
 | Total destinasi (cap 20) | 0.25 |
 | Efisiensi harga (lebih murah = lebih tinggi) | 0.25 |
 | Pemanfaatan durasi (mendekati batas = tinggi) | 0.15 |
-| Bonus soft constraint (maks +0.10) | — |
+| Bonus soft constraint (maks +0.10) | - |
 
 Nilai fitness maksimum ~1.10.
 
